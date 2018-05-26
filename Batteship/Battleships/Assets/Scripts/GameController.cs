@@ -4,6 +4,13 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
+//TODO FOR NOW:
+//TODO trafianie przez komputer w ustawione statki
+//TODO plansza komputera - losowanie statkow
+//TODO zmienianie ruchow graczy komputer - uzytkownik
+//TODO gameover 
+
+
 public class GameController : MonoBehaviour{
 
     public Text[] buttonPlayerList;
