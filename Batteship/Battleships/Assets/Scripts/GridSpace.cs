@@ -7,10 +7,28 @@ public class GridSpace : MonoBehaviour {
 
     public Button button;
     public Text buttonText;
-    public string playerChoice;
+    //public string playerChoice;
+    private GameController gameController;
+    //private int valueOfChosenShips=0;
+
+   
+
     public void SetSpace()
+    { 
+            buttonText.text = gameController.GetPlayerChoice();
+            button.interactable = false;
+            //valueOfChosenShips++;
+            gameController.EndTurn();
+    }
+
+    public void theGame()
     {
-        buttonText.text = playerChoice;
-        button.interactable = false;
+        // gameController.GetPlayerSide();
+       // gameController.EndTurn();
+    }
+
+    public void SetGameControllerReference (GameController controller)
+    {
+        gameController = controller;
     }
 }
