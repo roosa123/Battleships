@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,8 +17,19 @@ public class GameController : MonoBehaviour{
     public Text[] buttonPlayerList;
     private string playerChoice = "x";
     BoardGame enemyBoard = new BoardGame();
+    BoardGame playerBoard = new BoardGame();
+    public bool isPlayerMove = true;
+    System.Random rand = new System.Random(System.DateTime.Now.Millisecond);        //maszyna losująca...
 
+    public void hit(BoardGame board, Coordinate coor)                           //TODO fajny efekt na trafianie
+    {
+        board.boardGame[coor.getCoordinateX(), coor.getCoordinateY()] = 99;
+    }                    
 
+    public void notHit(BoardGame board, Coordinate coor)                     //jeszcze lepszy efekt na nie trafienie
+    {
+        board.boardGame[coor.getCoordinateX(), coor.getCoordinateY()] = 666;
+    }               
 
     void SetGameControllerReferenceOnButtons()
     {
@@ -72,7 +84,7 @@ public class GameController : MonoBehaviour{
     
     public void setEnemyShipsOnTheBoard()
     {
-        System.Random rand = new System.Random(System.DateTime.Now.Millisecond);        //maszyna losująca...
+        
         Ship[] ships = new Ship[10];
         ships[0] = new Titanic();
         ships[1] = new SailingShip();
@@ -280,5 +292,66 @@ public class GameController : MonoBehaviour{
         
     }
 
-    public void gameOver() { }
+    public void playersChange()                  //zmiana gracza
+    {
+        if (isPlayerMove)
+        {
+            playerMove();
+        }
+        else
+            computerMove();
+    }            
+
+    public void computerMove()                  // TODO maszynka losująca do trafiania
+    {
+        Coordinate coordOfComputerHit = new Coordinate();
+
+        coordOfComputerHit.setCoordinateX(rand.Next(0, 9));
+        coordOfComputerHit.setCoordinateY(rand.Next(0, 9));
+
+        checkIsHit(playerBoard, coordOfComputerHit);
+    }
+
+    public void playerMove ()          //TODO celowanie przez użytkownika w plansze komputera
+    {
+        Coordinate coordFromPlayer= new Coordinate();
+
+        checkIsHit(enemyBoard, coordFromPlayer);
+    }                 
+
+    public void checkIsHit(BoardGame board, Coordinate coor)         //TODO sprawdzanie czy sie trafilo, dla kompa i usera
+    {
+        if (board.boardGame[coor.getCoordinateX(), coor.getCoordinateY()] == 1)
+        {
+            hit(board, coor);
+        }
+        else
+            notHit(board, coor);
+    }                    
+
+    public void setUserShipsOnBoard() { }              //TODO sprawdzanie poprawności w wybranych polach dla statkow
+
+    public void isGameOver()
+    {
+        if (numberOfOne(enemyBoard) == 0 || numberOfOne(playerBoard) == 0)
+            gameOver();
+    }
+
+    public int numberOfOne(BoardGame board)
+    {
+        int howManyOne = 0;
+        for (int i = 0; i <= 9; i++)
+        {
+            for (int j = 0; j <=9; j++)
+            {
+                if (board.boardGame[i, j] == 1)
+                    howManyOne++;
+            }
+        }
+        return howManyOne;
+    }
+    public void gameOver()                              //cos fajnego na koniec
+    {
+        Debug.Log("YOU LOOOOOSE");
+    }
 }

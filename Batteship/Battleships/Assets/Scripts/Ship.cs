@@ -4,7 +4,7 @@
     protected string nameOfShip;
     protected int numberOfShips;
     protected Coordinate coordinateOfShip;
-    protected int numberOfHits;
+    private int numberOfHits;
 
     public virtual int getLengthOfShip()
     {
@@ -40,9 +40,20 @@
     {
         get
         {
-            return numberOfHits <= lengthOfShip;
+            return NumberOfHits <= lengthOfShip;
         }
     }
-   
-	
+
+    protected int NumberOfHits
+    {
+        get
+        {
+            return numberOfHits;
+        }
+
+        set
+        {
+            numberOfHits = value;
+        }
+    }
 }
