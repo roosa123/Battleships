@@ -1,33 +1,48 @@
 ﻿public abstract class Ship {
 
-    private int lengthOfShip;
-    private string nameOfShip;
-    private int numberOfShips;
-    private Coordinate coordinateOfShip;
+    protected int lengthOfShip;
+    protected string nameOfShip;
+    protected int numberOfShips;
+    protected Coordinate coordinateOfShip;
+    protected int numberOfHits;
 
-    public int getLengthOfShip()
+    public virtual int getLengthOfShip()
     {
         return lengthOfShip;
     }
 
-    public void setLengthOfShip(int length)
+    public virtual void setLengthOfShip(int length)
     {
         lengthOfShip = length;
     }
 
-    public string getNameOfShip()
+    public virtual string getNameOfShip()
     {
         return nameOfShip;
     }
 
-    public void setNameOfShip (string name)
+    public virtual void setNameOfShip (string name)
     {
         nameOfShip = name;
+    }
+
+    public virtual int getNumberOfShips()
+    {
+        return numberOfShips;
     }
 
     public virtual void drawShipOnBoard()
     {
 
     }
+
+    public bool isSunk
+    {
+        get
+        {
+            return numberOfHits <= lengthOfShip;
+        }
+    }
+   
 	
 }
