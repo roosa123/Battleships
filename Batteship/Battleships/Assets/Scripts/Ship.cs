@@ -40,7 +40,7 @@
     {
         get
         {
-            return NumberOfHits <= lengthOfShip;
+            return NumberOfHits >= lengthOfShip;
         }
     }
 

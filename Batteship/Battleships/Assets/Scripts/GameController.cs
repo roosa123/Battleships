@@ -39,6 +39,27 @@ public class GameController : MonoBehaviour{
         }
     }
 
+    public void blockOtherCell(Vector3 posit)
+    {
+        Vector3 positionOtherCell;
+        bool posX;
+        bool posY;
+        for (int i = 0; i < buttonPlayerList.Length; i++)
+        {
+            positionOtherCell = buttonPlayerList[i].GetComponentInParent<Button>().transform.position;
+
+            posX = ((positionOtherCell.x + 12 > posit.x - 20) && (positionOtherCell.x - 12 < posit.x - 20))
+                || ((positionOtherCell.x - 12 < posit.x + 20) && (positionOtherCell.x + 12 > posit.x + 20));
+            posY = ((positionOtherCell.y + 12 > posit.y - 20) && (positionOtherCell.y - 12 < posit.y - 20))
+                || ((positionOtherCell.y - 12 < posit.y + 20) && (positionOtherCell.y + 12 > posit.y + 20));
+
+            if (posX && posY)
+            {
+                buttonPlayerList[i].GetComponentInParent<Button>().interactable = false;
+            }
+        }
+    }
+
     private void Awake()
     {
         setEnemyShipsOnTheBoard();
@@ -51,7 +72,12 @@ public class GameController : MonoBehaviour{
         for (int i = 0; i < buttonPlayerList.Length; i++)
         {
             buttonPlayerList[i].GetComponentInParent<Button>().interactable = false;
+            
         }
+        /*for (int j =0; j < buttonPlayerList.Length; j++)
+        {
+            buttonPlayerList[j].GetComponentInParent<Button>().colors = ColorBlock.defaultColorBlock;
+        }*/
         Debug.Log("Statki zostaly ustawione");
     }
 
