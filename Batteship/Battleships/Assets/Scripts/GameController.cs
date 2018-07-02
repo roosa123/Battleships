@@ -15,21 +15,43 @@ using UnityEngine.UI;
 public class GameController : MonoBehaviour{
 
     public Text[] buttonPlayerList;
+    public Text[] buttonEnemyList;
+    public Text yourTurn;
+    public Text setShips;
     private string playerChoice = "x";
     BoardGame enemyBoard = new BoardGame();
     BoardGame playerBoard = new BoardGame();
     public bool isPlayerMove = true;
     System.Random rand = new System.Random(System.DateTime.Now.Millisecond);        //maszyna losująca...
+    public Text playerHits;
+    public Text computerHits;
+    public int playerGoal = 0;
+    public int computerGoal= 0;
 
-    public void hit(BoardGame board, Coordinate coor)                           //TODO fajny efekt na trafianie
+
+  
+    public void Game()
+    {
+        //ustawienie statkow uzytkownika w setspace, automatycznie
+        //ustawienie statkow komputera w awake, automatycznie
+        //ruch użytkownika na planszy komputera
+    }
+
+    public void Update()
+    {
+        playerHits.GetComponent<Text>().text = "Your goal: " + playerGoal;
+        computerHits.GetComponent<Text>().text = "Computer goal: " + computerGoal;
+
+    }
+    /*public void Hit(BoardGame board, Coordinate coor)                           //TODO fajny efekt na trafianie
     {
         board.boardGame[coor.getCoordinateX(), coor.getCoordinateY()] = 99;
     }                    
 
-    public void notHit(BoardGame board, Coordinate coor)                     //jeszcze lepszy efekt na nie trafienie
+    public void NotHit(BoardGame board, Coordinate coor)                     //jeszcze lepszy efekt na nie trafienie
     {
         board.boardGame[coor.getCoordinateX(), coor.getCoordinateY()] = 666;
-    }               
+    }    */           
 
     void SetGameControllerReferenceOnButtons()
     {
@@ -38,8 +60,15 @@ public class GameController : MonoBehaviour{
             buttonPlayerList[i].GetComponentInParent<GridSpace>().SetGameControllerReference(this);
         }
     }
+    void SetGameControllerReferenceOnButtonsEnemy()
+    {
+        for (int i = 0; i < buttonEnemyList.Length; i++)
+        {
+            buttonEnemyList[i].GetComponentInParent<GridSpaceEnemy>().SetGameControllerReferenceEnemy(this);
+        }
+    }
 
-    public void blockOtherCell(Vector3 posit)
+    public void BlockOtherCell(Vector3 posit)
     {
         Vector3 positionOtherCell;
         bool posX;
@@ -57,14 +86,39 @@ public class GameController : MonoBehaviour{
             {
                 buttonPlayerList[i].GetComponentInParent<Button>().interactable = false;
             }
+            
+           if(posX && (positionOtherCell.y - 12< posit.y + 20)&& (positionOtherCell.y + 12 > posit.y - 20))
+            {
+                buttonPlayerList[i].GetComponentInParent<Button>().interactable = false;
+
+            }
+
+            if (posY && (positionOtherCell.x - 12 < posit.x + 20) && (positionOtherCell.x + 12 > posit.x - 20))
+            {
+                buttonPlayerList[i].GetComponentInParent<Button>().interactable = false;
+
+            }
+
+
+
         }
     }
 
     private void Awake()
     {
-        setEnemyShipsOnTheBoard();
+        SetEnemyShipsOnTheBoard();
         SetGameControllerReferenceOnButtons();
-        wypisz();
+        SetGameControllerReferenceOnButtonsEnemy();
+        yourTurn.color = Color.black;
+       
+        for (int i = 0; i < buttonEnemyList.Length; i++)
+        {
+            buttonEnemyList[i].GetComponentInParent<Button>().interactable = false;
+
+        }
+
+        
+        Wypisz();
     }
 
     public void EndSetShips()
@@ -74,6 +128,30 @@ public class GameController : MonoBehaviour{
             buttonPlayerList[i].GetComponentInParent<Button>().interactable = false;
             
         }
+
+        for (int i = 0; i < buttonEnemyList.Length; i++)
+        {
+            buttonEnemyList[i].GetComponentInParent<Button>().interactable = true;
+            buttonEnemyList[i].GetComponentInChildren<Text>().color = Color.blue;
+
+        }
+
+        yourTurn.color = Color.white;
+        setShips.color = Color.black;
+
+
+        /* int x, y;                 //miala byc osobna tablica playerBoard
+         for (int i =0; i <buttonPlayerList.Length; i++)
+         {
+             if (buttonPlayerList[i].text == playerChoice)
+             {
+                 x = i / 10;
+                 y = i % 10;
+                 playerBoard.boardGame[x,y] = 1;
+             }
+
+         }*/
+
         /*for (int j =0; j < buttonPlayerList.Length; j++)
         {
             buttonPlayerList[j].GetComponentInParent<Button>().colors = ColorBlock.defaultColorBlock;
@@ -107,11 +185,120 @@ public class GameController : MonoBehaviour{
         Debug.Log("Jeszcze jeden"); 
     }
 
+    public void SetIllegalCell(Coordinate coordinate)
+    {
+        Coordinate temp = new Coordinate();
+        temp.setCoordinateX(coordinate.getCoordinateX()) ;
+        temp.setCoordinateY(coordinate.getCoordinateY());
+
+        if (coordinate.getCoordinateX() -1 >= 0)
+        {
+            temp.setCoordinateX(coordinate.getCoordinateX() - 1);
+            temp.setCoordinateY(coordinate.getCoordinateY());
+            enemyBoard.setValueOfCell(temp, 2);
+        }
+
+        if (coordinate.getCoordinateY() - 1 >= 0)
+        {
+            temp.setCoordinateX(coordinate.getCoordinateX());
+            temp.setCoordinateY(coordinate.getCoordinateY() - 1);
+            enemyBoard.setValueOfCell(temp, 2);
+        }
+
+        if (coordinate.getCoordinateX() + 1 <= 9)
+        {
+            temp.setCoordinateX(coordinate.getCoordinateX() + 1);
+            temp.setCoordinateY(coordinate.getCoordinateY());
+            enemyBoard.setValueOfCell(temp, 2);
+        }
+
+        if (coordinate.getCoordinateY() + 1 <= 9)
+        {
+            temp.setCoordinateX(coordinate.getCoordinateX());
+            temp.setCoordinateY(coordinate.getCoordinateY() + 1);
+            enemyBoard.setValueOfCell(temp, 2);
+        }
+
+        if(coordinate.getCoordinateX() - 1 >= 0 && coordinate.getCoordinateY() - 1 >= 0)
+        {
+            temp.setCoordinateX(coordinate.getCoordinateX() - 1);
+            temp.setCoordinateY(coordinate.getCoordinateY() - 1);
+            enemyBoard.setValueOfCell(temp, 2);
+
+        }
+        if (coordinate.getCoordinateX() + 1 <= 9 && coordinate.getCoordinateY() - 1 >= 0)
+        {
+            temp.setCoordinateX(coordinate.getCoordinateX() + 1);
+            temp.setCoordinateY(coordinate.getCoordinateY() - 1);
+            enemyBoard.setValueOfCell(temp, 2);
+
+        }
+
+        if (coordinate.getCoordinateX() + 1 <= 9 && coordinate.getCoordinateY() + 1 <= 9)
+        {
+            temp.setCoordinateX(coordinate.getCoordinateX() + 1);
+            temp.setCoordinateY(coordinate.getCoordinateY() + 1);
+            enemyBoard.setValueOfCell(temp, 2);
+
+        }
+
+        if (coordinate.getCoordinateX() - 1 >= 0 && coordinate.getCoordinateY() + 1 <= 9)
+        {
+            temp.setCoordinateX(coordinate.getCoordinateX() - 1);
+            temp.setCoordinateY(coordinate.getCoordinateY() + 1);
+            enemyBoard.setValueOfCell(temp, 2);
+
+        }
+    }
     
-    public void setEnemyShipsOnTheBoard()
+    public void SetEnemyShipsOnTheBoard() //dobrze 10 pojedynczych statkow nie polaczonych
     {
         
-        Ship[] ships = new Ship[10];
+        for (int i = 0; i < 10; i++)
+        {
+            Coordinate coor = new Coordinate();
+            Coordinate coorTemp = new Coordinate();
+
+            coor.setCoordinateX(rand.Next(0, 9));
+            coor.setCoordinateY(rand.Next(0, 9));
+            Boolean notWithZero = true;
+
+            while (notWithZero)
+            if (enemyBoard.boardGame[coor.getCoordinateX(), coor.getCoordinateY()] == 0)       //jeśli wylosowana wspołrz ma wartosc 0 to stawiamy statek
+            {
+                enemyBoard.setValueOfCell(coor, 1);
+                SetIllegalCell(coor);           //stawiamy niedozwolone komorki
+                notWithZero = false;
+            }
+            else
+            {
+                coor.setCoordinateX(rand.Next(0, 9));
+                coor.setCoordinateY(rand.Next(0, 9));
+            }
+
+        }
+
+        for (int i = 0; i < 10; i++)
+        {
+            for (int j = 0; j < 10; j++)
+            {
+                if (enemyBoard.boardGame[i, j] == 1)
+                {
+                    buttonEnemyList[i * 10 + j].text = "x";
+                    buttonEnemyList[i * 10 + j].GetComponentInChildren<Text>().color = Color.red;
+
+                }
+            }
+        }
+        for (int i = 0; i < buttonEnemyList.Length; i++)
+        {
+
+            buttonEnemyList[i].GetComponentInParent<Button>().interactable = true;
+
+        }
+
+        #region otherPlacing
+        /*Ship[] ships = new Ship[10];
         ships[0] = new Titanic();
         ships[1] = new SailingShip();
         ships[2] = new SailingShip();
@@ -299,71 +486,95 @@ public class GameController : MonoBehaviour{
                 coorTemp.setCoordinateY(coor.getCoordinateY());
             }
 
-            wypisz();
-        }
+            Wypisz();
+        }*/
+        #endregion
 
     }
 
     //---------------------HELP----------------------
-    void wypisz()
+    void Wypisz()
     {
         
             for (int i = 0; i < 10; i++)
             {
                 for (int j = 0; j < 10; j++)
                 {
-                Debug.Log(enemyBoard.boardGame[i, j]); 
+                Debug.Log(playerBoard.boardGame[i, j]); 
                 }
             }
         
     }
 
-    public void playersChange()                  //zmiana gracza
+    public void PlayersChange()                  //zmiana gracza
     {
         if (isPlayerMove)
         {
-            playerMove();
+            PlayerMove();
         }
         else
-            computerMove();
-    }            
-
-    public void computerMove()                  // TODO maszynka losująca do trafiania
+            ComputerMove();
+    }  
+    
+   
+    public void ComputerMove()                  // TODO maszynka losująca do trafiania
     {
         Coordinate coordOfComputerHit = new Coordinate();
 
+
         coordOfComputerHit.setCoordinateX(rand.Next(0, 9));
         coordOfComputerHit.setCoordinateY(rand.Next(0, 9));
-
-        checkIsHit(playerBoard, coordOfComputerHit);
+        /*while (tmpPlayeBoard.boardGame[coordOfComputerHit.getCoordinateX(),coordOfComputerHit.getCoordinateY()]==1)
+        {
+            coordOfComputerHit.setCoordinateX(rand.Next(0, 9));
+            coordOfComputerHit.setCoordinateY(rand.Next(0, 9));
+        }
+        tmpPlayeBoard.boardGame[coordOfComputerHit.getCoordinateX(), coordOfComputerHit.getCoordinateY()] = 1;*/
+        CheckIsHit (coordOfComputerHit);
+        yourTurn.color = Color.white;
+        IsGameOver();
     }
 
-    public void playerMove ()          //TODO celowanie przez użytkownika w plansze komputera
+    public void PlayerMove ()          //TODO celowanie przez użytkownika w plansze komputera
     {
         Coordinate coordFromPlayer= new Coordinate();
 
-        checkIsHit(enemyBoard, coordFromPlayer);
+        CheckIsHit( coordFromPlayer);
     }                 
 
-    public void checkIsHit(BoardGame board, Coordinate coor)         //TODO sprawdzanie czy sie trafilo, dla kompa i usera
+    public void CheckIsHit(Coordinate coor)         //TODO sprawdzanie czy sie trafilo, dla kompa
     {
-        if (board.boardGame[coor.getCoordinateX(), coor.getCoordinateY()] == 1)
+        int x = coor.getCoordinateX();
+        int y = coor.getCoordinateY();
+        if (buttonPlayerList[x*10 + y].GetComponentInChildren<Text>().text == "x" )
         {
-            hit(board, coor);
+
+            buttonPlayerList[x * 10 + y].text = "O";
+            computerGoal++;
+            //------------------------WSZYSTKO ZIELONE-------------------------------
+            //buttonPlayerList[x * 10 + y].material.color = Color.green;
+        }
+        /*if (board.boardGame[coor.getCoordinateX(), coor.getCoordinateY()] == 1)
+        {
+            Hit(board, coor);
         }
         else
-            notHit(board, coor);
+            NotHit(board, coor);*/
     }                    
 
-    public void setUserShipsOnBoard() { }              //TODO sprawdzanie poprawności w wybranych polach dla statkow
+   // public void SetUserShipsOnBoard() { }              //TODO sprawdzanie poprawności w wybranych polach dla statkow
 
-    public void isGameOver()
+    public void IsGameOver()
     {
-        if (numberOfOne(enemyBoard) == 0 || numberOfOne(playerBoard) == 0)
-            gameOver();
+        if (computerGoal ==10 || playerGoal == 10)
+        {
+            GameOver();
+        }
+
+
     }
 
-    public int numberOfOne(BoardGame board)
+    /*public int NumberOfOne(BoardGame board)
     {
         int howManyOne = 0;
         for (int i = 0; i <= 9; i++)
@@ -375,9 +586,21 @@ public class GameController : MonoBehaviour{
             }
         }
         return howManyOne;
-    }
-    public void gameOver()                              //cos fajnego na koniec
+    }*/
+    public void GameOver()                              //cos fajnego na koniec
     {
+        if (playerGoal == 10)
+        {
+            yourTurn.GetComponent<Text>().text = "YOU WON";
+        }
+        else
+            yourTurn.GetComponent<Text>().text = "YOU LOSE";
         Debug.Log("YOU LOOOOOSE");
+
+        for (int i = 0; i < buttonEnemyList.Length; i++)
+        {
+            buttonEnemyList[i].GetComponentInParent<Button>().interactable = false;
+
+        }
     }
 }

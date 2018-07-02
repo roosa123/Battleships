@@ -1,9 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Game : MonoBehaviour {
 
-	//------------------klasa dla pojedynczej rozgrywki----------------------
-    //-------------funkcje beda przeniesione z controlera rozgrywki--------------
+    private GameController gameController;
+
+
+  
+
 }

@@ -66,9 +66,9 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 0, g: 0.5164667, b: 0.9716981, a: 1}
-    m_HighlightedColor: {r: 0.17702031, g: 0.9622642, b: 0.29675853, a: 1}
-    m_PressedColor: {r: 0.23282309, g: 0.6415094, b: 0.021181926, a: 1}
+    m_NormalColor: {r: 0, g: 0, b: 1, a: 1}
+    m_HighlightedColor: {r: 0, g: 0, b: 1, a: 1}
+    m_PressedColor: {r: 0, g: 0, b: 1, a: 1}
     m_DisabledColor: {r: 1, g: 0.24056602, b: 0.24056602, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -112,7 +112,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   button: {fileID: 114311803750676130}
   buttonText: {fileID: 114637415613133272}
-  playerChoice: X
 --- !u!114 &114624303886340208
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -152,7 +151,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.27064443, g: 0, b: 0.8773585, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:

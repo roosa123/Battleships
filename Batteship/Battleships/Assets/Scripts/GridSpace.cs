@@ -25,19 +25,20 @@ public class GridSpace : MonoBehaviour {
         //button.image.color = Color.black;  //dziala
         //button.image.color = Color.HSVToRGB(0.1f, 0.8f, 0.6f);  ///nie dziala
 
-        float r = rand.Next(1, 100) / 100.0f;
+        /*float r = rand.Next(1, 100) / 100.0f;
         float g = rand.Next(1, 100) / 100.0f;
         float b = rand.Next(1, 100) / 100.0f;
 
-        button.image.color = new Color(r, g, b);  //dziala
+        button.image.color = new Color(r, g, b);  //dziala*/
 
+        button.image.color = Color.black;
         button.GetComponent<RectTransform>().sizeDelta = new Vector2(40f, 40f);
         button.transform.SetAsLastSibling();
 
 
         Vector3 posit = button.transform.position;
 
-        gameController.blockOtherCell(posit);
+        gameController.BlockOtherCell(posit);
         
 
         
