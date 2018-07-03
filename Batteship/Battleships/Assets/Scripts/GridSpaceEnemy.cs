@@ -19,9 +19,21 @@ public class GridSpaceEnemy : MonoBehaviour {
        
         if (button.GetComponentInChildren<Text>().text == "x")
         {
+
+            Instantiate(gameController.Particle, button.transform.position,
+              button.transform.rotation);
+
             button.image.color = Color.black;
             button.GetComponentInChildren<Text>().color = Color.white;
             button.GetComponentInChildren<Text>().text = "O";
+
+            gameController.Particle.transform.SetAsLastSibling();
+            Instantiate(gameController.Particle, button.transform.position,
+                button.transform.rotation);
+            
+            Instantiate(gameController.Particle, button.transform.position,
+                button.transform.rotation);
+            gameController.Particle.transform.SetAsLastSibling();
             gameController.playerGoal++;
            
         }

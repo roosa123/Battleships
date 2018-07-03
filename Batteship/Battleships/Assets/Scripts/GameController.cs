@@ -28,7 +28,13 @@ public class GameController : MonoBehaviour{
     public int playerGoal = 0;
     public int computerGoal= 0;
 
+    public GameObject Particle;
+    public GameObject Particle1;
+    public GameObject Particle2;
 
+    public Vector3 position;
+    public Quaternion rotation;
+    
   
     public void Game()
     {
@@ -41,6 +47,15 @@ public class GameController : MonoBehaviour{
     {
         playerHits.GetComponent<Text>().text = "Your goal: " + playerGoal;
         computerHits.GetComponent<Text>().text = "Computer goal: " + computerGoal;
+
+        Particle.GetComponent<Renderer>().sortingLayerName = "Foreground";
+        Instantiate(Particle, position, rotation);
+        Instantiate(Particle1, position, rotation);
+        Instantiate(Particle2, position, rotation);
+
+
+        
+        
 
     }
     /*public void Hit(BoardGame board, Coordinate coor)                           //TODO fajny efekt na trafianie
@@ -110,6 +125,7 @@ public class GameController : MonoBehaviour{
         SetGameControllerReferenceOnButtons();
         SetGameControllerReferenceOnButtonsEnemy();
         yourTurn.color = Color.black;
+        
        
         for (int i = 0; i < buttonEnemyList.Length; i++)
         {
@@ -544,10 +560,16 @@ public class GameController : MonoBehaviour{
 
     public void CheckIsHit(Coordinate coor)         //TODO sprawdzanie czy sie trafilo, dla kompa
     {
+        
         int x = coor.getCoordinateX();
         int y = coor.getCoordinateY();
         if (buttonPlayerList[x*10 + y].GetComponentInChildren<Text>().text == "x" )
         {
+
+            position = buttonPlayerList[x * 10 + y].GetComponentInParent<Button>().transform.position;
+            rotation = buttonPlayerList[x * 10 + y].GetComponentInParent<Button>().transform.rotation;
+            Instantiate(Particle, position, rotation);
+            Particle.transform.SetAsLastSibling();
 
             buttonPlayerList[x * 10 + y].text = "O";
             computerGoal++;

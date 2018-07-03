@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 114624303886340208}
   - component: {fileID: 114311803750676130}
   - component: {fileID: 114619325657050760}
+  - component: {fileID: 210422649177466436}
   m_Layer: 5
   m_Name: Grid Space
   m_TagString: Untagged
@@ -172,6 +173,16 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 
+--- !u!210 &210422649177466436
+SortingGroup:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1376098053940348}
+  m_Enabled: 1
+  m_SortingLayerID: -1788505401
+  m_SortingLayer: 1
+  m_SortingOrder: 0
 --- !u!222 &222801368940034050
 CanvasRenderer:
   m_ObjectHideFlags: 1

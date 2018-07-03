@@ -40,6 +40,7 @@ GameObject:
   - component: {fileID: 114788266967540962}
   - component: {fileID: 114371825610977174}
   - component: {fileID: 114931760513291096}
+  - component: {fileID: 210239246614783026}
   m_Layer: 5
   m_Name: Grid Space Enemy
   m_TagString: Untagged
@@ -174,6 +175,16 @@ MonoBehaviour:
   buttonText: {fileID: 114011010329538106}
   playerChoice: X
   shipOrNot: 
+--- !u!210 &210239246614783026
+SortingGroup:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1415334982069974}
+  m_Enabled: 1
+  m_SortingLayerID: 705737251
+  m_SortingLayer: 2
+  m_SortingOrder: 0
 --- !u!222 &222114775147198482
 CanvasRenderer:
   m_ObjectHideFlags: 1
